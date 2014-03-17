@@ -1,0 +1,52 @@
+(** {2 General types} *)
+
+type int64 = int
+  <ocaml repr="int64">
+  <biniou repr="int64">
+
+type positive = int <ocaml validator="fun x -> x > 0">
+
+(** {2 Errors} *)
+
+type error = [
+  | MissingCommand <json name="missingCommand">
+  | UnknownStream <json name="unknownStream">
+  | TransactionNotFound <json name="transactionNotFound">
+  | ActNotFound <json name="actNotFound"> (* error code 15 *)
+  | InvalidParams <json name="invalidParams"> (* error code 26 *)
+  | UnknownCmd <json name="unknownCmd"> (* error code 27 *)
+]
+
+(** {2 Commands} *)
+
+type command = [
+  (* Server info *)
+  | Server_info <json name="server_info">
+  | Server_state <json name="server_state">
+  | Ping <json name="ping">
+  (* Stream subscription *)
+  | Subscribe <json name="subscribe">
+  | Unsubscribe <json name="unsubscribe">
+]
+
+(** {2 Requests} *)
+
+type request = {
+  command : command;
+} <ocaml field_prefix="request_">
+
+(** {2 Responses} *)
+
+type response_status = [
+  | Success <json name="success">
+  | Error <json name="error">
+]
+
+type response = {
+  id : int64;
+  status : response_status;
+  (* If an error happens *)
+  ?error : error option;
+  ?error_message : string option;
+  ?request : request option;
+} <ocaml field_prefix="response_">
