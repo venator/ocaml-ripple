@@ -38,22 +38,32 @@ let rec prompt ~push () =
 
 (* Websocket receiver *)
 
-let rec response_handler ~stream () =
+let rec response_handler ~stream ~push () =
+  let open Websocket in
   Lwt_stream.next stream >>= fun frame ->
-  Lwt_io.printl (Websocket.Frame.content frame) >>= response_handler ~stream
+  match Frame.opcode frame with
+  | `Ping ->
+      push (Some (Frame.of_string ~opcode:`Pong ""));
+      response_handler ~stream ~push ()
+  | _ ->
+      Lwt_io.printl (Websocket.Frame.content frame) >>=
+      response_handler ~stream ~push
 
 (* Websocket handler *)
 
 let ripple_handler (stream, push) =
-  prompt ~push () <&> response_handler ~stream ()
+  prompt ~push () <&> response_handler ~stream ~push ()
 
 (* Main *)
 
 let main () =
   Lwt_io.printl "**** Ripple Test Client ****" >>= fun () ->
   print_commands () >>= fun () ->
-  Lwt_io.printf "Connecting to %s...\n" Sys.argv.(1) >>= fun () ->
-  Websocket.with_connection (Uri.of_string Sys.argv.(1)) ripple_handler
+  let server_url =
+    if Array.length Sys.argv < 2 then "wss://s-east.ripple.com"
+    else Sys.argv.(1) in
+  Lwt_io.printf "Connecting to %s...\n" server_url >>= fun () ->
+  Websocket.with_connection (Uri.of_string server_url) ripple_handler
 
 let () =
   Lwt_main.run (main ())
