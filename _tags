@@ -1,1 +1,1 @@
-<{test_ripple}.{ml,mli,byte,native}>: package(atdgen), package(lwt), package(websocket)
+<*/**.{ml,mli,byte,native}>: package(atdgen), package(lwt), package(websocket)
