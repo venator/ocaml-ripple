@@ -1,0 +1,12 @@
+# OASIS_START
+# DO NOT EDIT (digest: 5297b64a44d5c348be811481c230d219)
+version = "0.1"
+description = "Ripple interface"
+requires = "lwt websocket atdgen"
+archive(byte) = "ripple.cma"
+archive(byte, plugin) = "ripple.cma"
+archive(native) = "ripple.cmxa"
+archive(native, plugin) = "ripple.cmxs"
+exists_if = "ripple.cma"
+# OASIS_STOP
+

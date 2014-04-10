@@ -1,1 +1,35 @@
-<*/**.{ml,mli,byte,native}>: package(atdgen), package(lwt), package(websocket)
+# OASIS_START
+# DO NOT EDIT (digest: a8b43a9e0fed0e47d67a6efa3fb1c56a)
+# Ignore VCS directories, you can use the same kind of rule outside
+# OASIS_START/STOP if you want to exclude directories that contains
+# useless stuff for the build process
+<**/.svn>: -traverse
+<**/.svn>: not_hygienic
+".bzr": -traverse
+".bzr": not_hygienic
+".hg": -traverse
+".hg": not_hygienic
+".git": -traverse
+".git": not_hygienic
+"_darcs": -traverse
+"_darcs": not_hygienic
+# Library ripple
+"lib/ripple.cmxs": use_ripple
+<lib/*.ml{,i}>: pkg_atdgen
+<lib/*.ml{,i}>: pkg_lwt
+<lib/*.ml{,i}>: pkg_websocket
+# Executable cli
+<src/cli.{native,byte}>: pkg_atdgen
+<src/cli.{native,byte}>: pkg_lwt
+<src/cli.{native,byte}>: pkg_websocket
+<src/cli.{native,byte}>: use_ripple
+# Executable transactions
+<src/transactions.{native,byte}>: pkg_atdgen
+<src/transactions.{native,byte}>: pkg_lwt
+<src/transactions.{native,byte}>: pkg_websocket
+<src/transactions.{native,byte}>: use_ripple
+<src/*.ml{,i}>: pkg_atdgen
+<src/*.ml{,i}>: pkg_lwt
+<src/*.ml{,i}>: pkg_websocket
+<src/*.ml{,i}>: use_ripple
+# OASIS_STOP

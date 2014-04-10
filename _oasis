@@ -1,0 +1,30 @@
+OASISFormat: 0.4
+Name: ripple
+Version: 0.1
+Synopsis: Ripple interface
+Authors: Guillem Rieu <guillem@luminar.fr>, Vincent Bernardoff <vb@luminar.eu.org>
+License: ISC
+Plugins: META (0.4), DevFiles (0.4)
+BuildTools: ocamlbuild
+
+Library ripple
+  Path: lib
+  Modules: Ripple
+  BuildDepends: lwt, websocket, atdgen
+  CompiledObject: best
+
+Executable cli
+  Path: src
+  MainIs: cli.ml
+  BuildDepends: ripple
+  CompiledObject: best
+  Build: true
+  Install: false
+
+Executable transactions
+  Path: src
+  MainIs: transactions.ml
+  BuildDepends: ripple
+  CompiledObject: best
+  Build: true
+  Install: false

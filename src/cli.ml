@@ -6,6 +6,7 @@ open Ripple_api_t
 let commands = [
   ("server_info", `Server_info);
   ("server_state", `Server_state);
+  ("subscribe", `Subscribe);
 ]
 
 let print_commands () =
@@ -15,31 +16,33 @@ let print_commands () =
 
 (* Ripple sender *)
 
-let rec prompt ~push () =
+let rec prompt ~push =
   let send_command cmd =
-    Lwt.wrap (fun () -> push cmd)
-    >>= prompt ~push
+    push cmd;
+    prompt ~push
   in
   Lwt_io.print "> " >>= fun () ->
   Lwt_io.read_line Lwt_io.stdin >>= fun cmd ->
     try
       send_command (List.assoc cmd commands)
     with
-    | Not_found -> print_commands () >>= prompt ~push
+    | Not_found ->
+        print_commands () >>= fun () ->
+        prompt ~push
 
 (* Ripple receiver *)
 
-let rec response_handler ~stream ~push () =
+let rec response_handler ~stream ~push =
   Lwt_stream.next stream >>= fun response ->
   (* TODO: get response instead of string, see [ripple.ml] *)
   (* Lwt_io.printl (Ripple_api_j.string_of_response response) >>= *)
-  Lwt_io.printl response >>=
+  Lwt_io.printl response >>= fun () ->
   response_handler ~stream ~push
 
 (* Ripple handler *)
 
 let ripple_handler (stream, push) =
-  prompt ~push () <&> response_handler ~stream ~push ()
+  prompt ~push <&> response_handler ~stream ~push
 
 (* Main *)
 

@@ -1,18 +1,41 @@
-CC=ocamlbuild
-OPTS=-use-ocamlfind
-TARGETS=test_ripple.ml
+# OASIS_START
+# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
 
-.PHONY: all native byte debug profiling clean
+SETUP = ocaml setup.ml
 
-all: native
+build: setup.data
+	$(SETUP) -build $(BUILDFLAGS)
 
-native:    $(TARGETS:.ml=.native)
-byte:      $(TARGETS:.ml=.byte)
-debug:     $(TARGETS:.ml=.d.byte)
-profiling: $(TARGETS:.ml=.p.native)
+doc: setup.data build
+	$(SETUP) -doc $(DOCFLAGS)
 
-%.native %.byte %.d.byte %.p.native: %.ml
-	$(CC) $(OPTS) $@
+test: setup.data build
+	$(SETUP) -test $(TESTFLAGS)
+
+all:
+	$(SETUP) -all $(ALLFLAGS)
+
+install: setup.data
+	$(SETUP) -install $(INSTALLFLAGS)
+
+uninstall: setup.data
+	$(SETUP) -uninstall $(UNINSTALLFLAGS)
+
+reinstall: setup.data
+	$(SETUP) -reinstall $(REINSTALLFLAGS)
 
 clean:
-	$(CC) -clean
+	$(SETUP) -clean $(CLEANFLAGS)
+
+distclean:
+	$(SETUP) -distclean $(DISTCLEANFLAGS)
+
+setup.data:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
+
+configure:
+	$(SETUP) -configure $(CONFIGUREFLAGS)
+
+.PHONY: build doc test all install uninstall reinstall clean distclean configure
+
+# OASIS_STOP

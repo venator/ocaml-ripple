@@ -75,6 +75,18 @@ let response_handler frame =
    * defined in ATD file. *)
   (* |> Ripple_api_j.response_of_string *)
 
+let open_connection uri =
+  Websocket.open_connection uri >>= fun (ws_stream, ws_pushfun) ->
+  let stream =
+    Lwt_stream.filter_map (ping_handler ~push:ws_pushfun) ws_stream
+    |> Lwt_stream.map response_handler in
+  Lwt.return (stream, ws_pushfun)
+
+let with_transactions uri =
+  open_connection uri >>= fun (stream, pushfun) ->
+  pushfun (Some (Websocket.Frame.of_string "{ \"command\": \"subscribe\", \"streams\": [\"transactions\"]}"));
+  Lwt.return stream
+
 let with_connection server ripple_handler =
   let handler (stream_ws, push_ws) =
     let stream =
