@@ -1,10 +1,10 @@
-# OASIS_START
-# DO NOT EDIT (digest: a3c674b4239234cbbe53afe090018954)
-
 SETUP = ocaml setup.ml
 
 build: setup.data
+	atdgen -j -j-std lib/ripple_api.atd
+	atdgen -t lib/ripple_api.atd
 	$(SETUP) -build $(BUILDFLAGS)
+	rm lib/ripple_api_*
 
 doc: setup.data build
 	$(SETUP) -doc $(DOCFLAGS)
@@ -37,5 +37,3 @@ configure:
 	$(SETUP) -configure $(CONFIGUREFLAGS)
 
 .PHONY: build doc test all install uninstall reinstall clean distclean configure
-
-# OASIS_STOP
