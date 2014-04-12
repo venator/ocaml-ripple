@@ -79,12 +79,12 @@ let open_connection uri =
   Websocket.open_connection uri >>= fun (ws_stream, ws_pushfun) ->
   let stream =
     Lwt_stream.filter_map (ping_handler ~push:ws_pushfun) ws_stream
-    |> Lwt_stream.map response_handler in
+    |> Lwt_stream.map Websocket.Frame.content in
   Lwt.return (stream, ws_pushfun)
 
 let with_transactions uri =
   open_connection uri >>= fun (stream, pushfun) ->
-  pushfun (Some (Websocket.Frame.of_string "{ \"command\": \"subscribe\", \"streams\": [\"transactions\"]}"));
+  pushfun (Some (Websocket.Frame.of_string "{ \"id\": 345, \"command\": \"subscribe\", \"streams\": [\"transactions\"]}"));
   Lwt_stream.next stream >>= fun json_str ->
   match (Ripple_api_j.response_of_string json_str).response_status with
   | `Success -> Lwt.return stream
@@ -97,7 +97,7 @@ let with_connection server ripple_handler =
       |> Lwt_stream.map response_handler
     in
     let push cmd =
-      let req = Ripple_api_j.string_of_request { request_command = cmd } in
+      let req = Ripple_api_j.string_of_request { request_id = Random.bits (); request_command = cmd } in
       push_ws (Some (Websocket.Frame.of_string req))
     in
     ripple_handler (stream, push)
