@@ -34,7 +34,7 @@ let rec response_handler mvar ~stream ~push =
   Lwt_stream.next stream >>= fun response ->
   (* TODO: get response instead of string, see [ripple.ml] *)
   (* Lwt_io.printl (Ripple_api_j.string_of_response response) >>= *)
-  Lwt_io.printl response >>= fun () ->
+  Lwt_io.printl (Yojson.Safe.prettify ~std:true response) >>= fun () ->
   Lwt_mvar.put mvar () >>= fun () ->
   response_handler mvar ~stream ~push
 
