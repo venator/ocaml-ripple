@@ -50,3 +50,61 @@ type response = {
   ?error_message : string option;
   ?request : request option;
 } <ocaml field_prefix="response_">
+
+(** {2 Streams} *)
+
+type dyn <ocaml_json module="Yojson.Safe" t="json"> <ocaml_biniou module="Yojson.Safe" t="json"> = abstract
+
+type final_fields = {
+  account <json name="Account"> : string;
+  book_directory <json name="BookDirectory"> : string;
+  book_node <json name="BookNode"> : string;
+  flags <json name="Flags"> : int;
+  owner_node <json name="OwnerNode"> : string;
+  previous_txn_id <json name="PreviousTxnID"> : string;
+  previous_txn_lgr_seq <json name="PreviousTxnLgrSeq"> : int;
+  sequence <json name="Sequence"> : int;
+  taker_gets <json name="TakerGets"> : dyn;
+  taker_pays <json name="TakerPays"> : dyn;
+  ledger_entry_type <json name="LedgerEntryType"> : string;
+  ledger_index <json name="LedgerIndex"> : string;
+} <ocaml field_prefix="final_fields_">
+
+type node = {
+  final_fields <json name="FinalFields"> : final_fields
+} <ocaml field_prefix="node_">
+
+type affected_node = {
+  ?modified_node <json name="ModifiedNode"> : node option;
+  ?deleted_node <json name="DeletedNode"> : node option;
+} <ocaml field_prefix="affected_node_">
+
+type tx_meta = {
+  affected_nodes <json name="AffectedNodes"> : affected_node list;
+  transaction_index <json name="TransactionIndex"> : int;
+  transactionResult <json name="TransactionResult"> : string;
+} <ocaml field_prefix="tx_meta_">
+
+type tx_data = {
+  account <json name="Account"> : string;
+  amount <json name="Amount"> : string;
+  destination <json name="Destination"> : string;
+  fee <json name="Fee"> : string;
+  flags <json name="Flags"> : int;
+  invoice_id <json name="InvoiceID"> : string;
+  sequence <json name="Sequence"> : int;
+  signing_pub_key <json name="SigningPubKey"> : string;
+} <ocaml field_prefix="tx_">
+
+type transaction = {
+  engine_result: string;
+  engine_result_code: int;
+  engine_result_message: string;
+  ledger_hash: string;
+  ledger_index: int;
+  meta: tx_meta;
+  status: string;
+  transaction: tx_data;
+  ty <json name="type"> : string;
+  validated: bool;
+} <ocaml field_prefix="tx_msg_">

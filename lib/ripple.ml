@@ -85,7 +85,10 @@ let open_connection uri =
 let with_transactions uri =
   open_connection uri >>= fun (stream, pushfun) ->
   pushfun (Some (Websocket.Frame.of_string "{ \"command\": \"subscribe\", \"streams\": [\"transactions\"]}"));
-  Lwt.return stream
+  Lwt_stream.next stream >>= fun json_str ->
+  match (Ripple_api_j.response_of_string json_str).response_status with
+  | `Success -> Lwt.return stream
+  | `Error -> Lwt.fail (Failure json_str)
 
 let with_connection server ripple_handler =
   let handler (stream_ws, push_ws) =

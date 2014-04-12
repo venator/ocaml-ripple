@@ -6,7 +6,6 @@ open Ripple_api_t
 let commands = [
   ("server_info", `Server_info);
   ("server_state", `Server_state);
-  ("subscribe", `Subscribe);
 ]
 
 let print_commands () =

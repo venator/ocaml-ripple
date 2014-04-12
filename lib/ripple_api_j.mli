@@ -23,6 +23,62 @@ type response = Ripple_api_t.response = {
   response_request (*atd request *): request option
 }
 
+type dyn = Yojson.Safe.json
+
+type final_fields = Ripple_api_t.final_fields = {
+  final_fields_account (*atd account *): string;
+  final_fields_book_directory (*atd book_directory *): string;
+  final_fields_book_node (*atd book_node *): string;
+  final_fields_flags (*atd flags *): int;
+  final_fields_owner_node (*atd owner_node *): string;
+  final_fields_previous_txn_id (*atd previous_txn_id *): string;
+  final_fields_previous_txn_lgr_seq (*atd previous_txn_lgr_seq *): int;
+  final_fields_sequence (*atd sequence *): int;
+  final_fields_taker_gets (*atd taker_gets *): dyn;
+  final_fields_taker_pays (*atd taker_pays *): dyn;
+  final_fields_ledger_entry_type (*atd ledger_entry_type *): string;
+  final_fields_ledger_index (*atd ledger_index *): string
+}
+
+type node = Ripple_api_t.node = {
+  node_final_fields (*atd final_fields *): final_fields
+}
+
+type affected_node = Ripple_api_t.affected_node = {
+  affected_node_modified_node (*atd modified_node *): node option;
+  affected_node_deleted_node (*atd deleted_node *): node option
+}
+
+type tx_meta = Ripple_api_t.tx_meta = {
+  tx_meta_affected_nodes (*atd affected_nodes *): affected_node list;
+  tx_meta_transaction_index (*atd transaction_index *): int;
+  tx_meta_transactionResult (*atd transactionResult *): string
+}
+
+type tx_data = Ripple_api_t.tx_data = {
+  tx_account (*atd account *): string;
+  tx_amount (*atd amount *): string;
+  tx_destination (*atd destination *): string;
+  tx_fee (*atd fee *): string;
+  tx_flags (*atd flags *): int;
+  tx_invoice_id (*atd invoice_id *): string;
+  tx_sequence (*atd sequence *): int;
+  tx_signing_pub_key (*atd signing_pub_key *): string
+}
+
+type transaction = Ripple_api_t.transaction = {
+  tx_msg_engine_result (*atd engine_result *): string;
+  tx_msg_engine_result_code (*atd engine_result_code *): int;
+  tx_msg_engine_result_message (*atd engine_result_message *): string;
+  tx_msg_ledger_hash (*atd ledger_hash *): string;
+  tx_msg_ledger_index (*atd ledger_index *): int;
+  tx_msg_meta (*atd meta *): tx_meta;
+  tx_msg_status (*atd status *): string;
+  tx_msg_transaction (*atd transaction *): tx_data;
+  tx_msg_ty (*atd ty *): string;
+  tx_msg_validated (*atd validated *): bool
+}
+
 val write_int64 :
   Bi_outbuf.t -> int64 -> unit
   (** Output a JSON value of type {!int64}. *)
@@ -162,4 +218,144 @@ val read_response :
 val response_of_string :
   string -> response
   (** Deserialize JSON data of type {!response}. *)
+
+val write_dyn :
+  Bi_outbuf.t -> dyn -> unit
+  (** Output a JSON value of type {!dyn}. *)
+
+val string_of_dyn :
+  ?len:int -> dyn -> string
+  (** Serialize a value of type {!dyn}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_dyn :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> dyn
+  (** Input JSON data of type {!dyn}. *)
+
+val dyn_of_string :
+  string -> dyn
+  (** Deserialize JSON data of type {!dyn}. *)
+
+val write_final_fields :
+  Bi_outbuf.t -> final_fields -> unit
+  (** Output a JSON value of type {!final_fields}. *)
+
+val string_of_final_fields :
+  ?len:int -> final_fields -> string
+  (** Serialize a value of type {!final_fields}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_final_fields :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> final_fields
+  (** Input JSON data of type {!final_fields}. *)
+
+val final_fields_of_string :
+  string -> final_fields
+  (** Deserialize JSON data of type {!final_fields}. *)
+
+val write_node :
+  Bi_outbuf.t -> node -> unit
+  (** Output a JSON value of type {!node}. *)
+
+val string_of_node :
+  ?len:int -> node -> string
+  (** Serialize a value of type {!node}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_node :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> node
+  (** Input JSON data of type {!node}. *)
+
+val node_of_string :
+  string -> node
+  (** Deserialize JSON data of type {!node}. *)
+
+val write_affected_node :
+  Bi_outbuf.t -> affected_node -> unit
+  (** Output a JSON value of type {!affected_node}. *)
+
+val string_of_affected_node :
+  ?len:int -> affected_node -> string
+  (** Serialize a value of type {!affected_node}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_affected_node :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> affected_node
+  (** Input JSON data of type {!affected_node}. *)
+
+val affected_node_of_string :
+  string -> affected_node
+  (** Deserialize JSON data of type {!affected_node}. *)
+
+val write_tx_meta :
+  Bi_outbuf.t -> tx_meta -> unit
+  (** Output a JSON value of type {!tx_meta}. *)
+
+val string_of_tx_meta :
+  ?len:int -> tx_meta -> string
+  (** Serialize a value of type {!tx_meta}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_tx_meta :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> tx_meta
+  (** Input JSON data of type {!tx_meta}. *)
+
+val tx_meta_of_string :
+  string -> tx_meta
+  (** Deserialize JSON data of type {!tx_meta}. *)
+
+val write_tx_data :
+  Bi_outbuf.t -> tx_data -> unit
+  (** Output a JSON value of type {!tx_data}. *)
+
+val string_of_tx_data :
+  ?len:int -> tx_data -> string
+  (** Serialize a value of type {!tx_data}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_tx_data :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> tx_data
+  (** Input JSON data of type {!tx_data}. *)
+
+val tx_data_of_string :
+  string -> tx_data
+  (** Deserialize JSON data of type {!tx_data}. *)
+
+val write_transaction :
+  Bi_outbuf.t -> transaction -> unit
+  (** Output a JSON value of type {!transaction}. *)
+
+val string_of_transaction :
+  ?len:int -> transaction -> string
+  (** Serialize a value of type {!transaction}
+      into a JSON string.
+      @param len specifies the initial length
+                 of the buffer used internally.
+                 Default: 1024. *)
+
+val read_transaction :
+  Yojson.Safe.lexer_state -> Lexing.lexbuf -> transaction
+  (** Input JSON data of type {!transaction}. *)
+
+val transaction_of_string :
+  string -> transaction
+  (** Deserialize JSON data of type {!transaction}. *)
 
