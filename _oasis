@@ -12,6 +12,8 @@ Library ripple
   Modules: Ripple
   BuildDepends: lwt, websocket, atdgen
   CompiledObject: best
+  ByteOpt: -bin-annot
+  NativeOpt: -bin-annot
 
 Executable cli
   Path: src

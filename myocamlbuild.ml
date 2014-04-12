@@ -44,7 +44,7 @@ end
 
 
 (* OASIS_START *)
-(* DO NOT EDIT (digest: 288c6990b6ed5cad744244d6bdec7383) *)
+(* DO NOT EDIT (digest: 7e2d19702f00f3707d7a29d203591a7f) *)
 module OASISGettext = struct
 (* # 22 "src/oasis/OASISGettext.ml" *)
 
@@ -642,13 +642,27 @@ let package_default =
   {
      MyOCamlbuildBase.lib_ocaml = [("ripple", ["lib"], [])];
      lib_c = [];
-     flags = [];
+     flags =
+       [
+          (["oasis_library_ripple_byte"; "ocaml"; "link"; "byte"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_ripple_native"; "ocaml"; "link"; "native"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_ripple_byte"; "ocaml"; "ocamldep"; "byte"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_ripple_native"; "ocaml"; "ocamldep"; "native"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_ripple_byte"; "ocaml"; "compile"; "byte"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])]);
+          (["oasis_library_ripple_native"; "ocaml"; "compile"; "native"],
+            [(OASISExpr.EBool true, S [A "-bin-annot"])])
+       ];
      includes = [("src", ["lib"])]
   }
   ;;
 
 let dispatch_default = MyOCamlbuildBase.dispatch_default package_default;;
 
-# 608 "myocamlbuild.ml"
+# 622 "myocamlbuild.ml"
 (* OASIS_STOP *)
 Ocamlbuild_plugin.dispatch dispatch_default;;

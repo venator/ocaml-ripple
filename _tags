@@ -1,5 +1,5 @@
 # OASIS_START
-# DO NOT EDIT (digest: a8b43a9e0fed0e47d67a6efa3fb1c56a)
+# DO NOT EDIT (digest: d8477668beadf6260a0fe34b0bc3ad29)
 # Ignore VCS directories, you can use the same kind of rule outside
 # OASIS_START/STOP if you want to exclude directories that contains
 # useless stuff for the build process
@@ -15,6 +15,10 @@
 "_darcs": not_hygienic
 # Library ripple
 "lib/ripple.cmxs": use_ripple
+<lib/ripple.{cma,cmxa}>: oasis_library_ripple_byte
+<lib/*.ml{,i}>: oasis_library_ripple_byte
+<lib/ripple.{cma,cmxa}>: oasis_library_ripple_native
+<lib/*.ml{,i}>: oasis_library_ripple_native
 <lib/*.ml{,i}>: pkg_atdgen
 <lib/*.ml{,i}>: pkg_lwt
 <lib/*.ml{,i}>: pkg_websocket
