@@ -106,12 +106,12 @@ let positive_of_string s =
 let write_error = (
   fun ob x ->
     match x with
-      | `MissingCommand -> Bi_outbuf.add_string ob "<\"missingCommand\">"
-      | `UnknownStream -> Bi_outbuf.add_string ob "<\"unknownStream\">"
-      | `TransactionNotFound -> Bi_outbuf.add_string ob "<\"transactionNotFound\">"
-      | `ActNotFound -> Bi_outbuf.add_string ob "<\"actNotFound\">"
-      | `InvalidParams -> Bi_outbuf.add_string ob "<\"invalidParams\">"
-      | `UnknownCmd -> Bi_outbuf.add_string ob "<\"unknownCmd\">"
+      | `MissingCommand -> Bi_outbuf.add_string ob "\"missingCommand\""
+      | `UnknownStream -> Bi_outbuf.add_string ob "\"unknownStream\""
+      | `TransactionNotFound -> Bi_outbuf.add_string ob "\"transactionNotFound\""
+      | `ActNotFound -> Bi_outbuf.add_string ob "\"actNotFound\""
+      | `InvalidParams -> Bi_outbuf.add_string ob "\"invalidParams\""
+      | `UnknownCmd -> Bi_outbuf.add_string ob "\"unknownCmd\""
 )
 let string_of_error ?(len = 1024) x =
   let ob = Bi_outbuf.create len in
@@ -326,11 +326,11 @@ let error_of_string s =
 let write_command = (
   fun ob x ->
     match x with
-      | `Server_info -> Bi_outbuf.add_string ob "<\"server_info\">"
-      | `Server_state -> Bi_outbuf.add_string ob "<\"server_state\">"
-      | `Ping -> Bi_outbuf.add_string ob "<\"ping\">"
-      | `Subscribe -> Bi_outbuf.add_string ob "<\"subscribe\">"
-      | `Unsubscribe -> Bi_outbuf.add_string ob "<\"unsubscribe\">"
+      | `Server_info -> Bi_outbuf.add_string ob "\"server_info\""
+      | `Server_state -> Bi_outbuf.add_string ob "\"server_state\""
+      | `Ping -> Bi_outbuf.add_string ob "\"ping\""
+      | `Subscribe -> Bi_outbuf.add_string ob "\"subscribe\""
+      | `Unsubscribe -> Bi_outbuf.add_string ob "\"unsubscribe\""
 )
 let string_of_command ?(len = 1024) x =
   let ob = Bi_outbuf.create len in
@@ -623,8 +623,8 @@ let request_of_string s =
 let write_response_status = (
   fun ob x ->
     match x with
-      | `Success -> Bi_outbuf.add_string ob "<\"success\">"
-      | `Error -> Bi_outbuf.add_string ob "<\"error\">"
+      | `Success -> Bi_outbuf.add_string ob "\"success\""
+      | `Error -> Bi_outbuf.add_string ob "\"error\""
 )
 let string_of_response_status ?(len = 1024) x =
   let ob = Bi_outbuf.create len in
@@ -737,7 +737,7 @@ let read_response_status = (
 let response_status_of_string s =
   read_response_status (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let write__1 = (
-  Ag_oj_run.write_option (
+  Ag_oj_run.write_std_option (
     write_error
   )
 )
@@ -866,7 +866,7 @@ let read__1 = (
 let _1_of_string s =
   read__1 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let write__2 = (
-  Ag_oj_run.write_option (
+  Ag_oj_run.write_std_option (
     Yojson.Safe.write_string
   )
 )
@@ -995,7 +995,7 @@ let read__2 = (
 let _2_of_string s =
   read__2 (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let write__3 = (
-  Ag_oj_run.write_option (
+  Ag_oj_run.write_std_option (
     write_request
   )
 )
@@ -2172,7 +2172,7 @@ let read_node = (
 let node_of_string s =
   read_node (Yojson.Safe.init_lexer ()) (Lexing.from_string s)
 let write__4 = (
-  Ag_oj_run.write_option (
+  Ag_oj_run.write_std_option (
     write_node
   )
 )
