@@ -32,6 +32,7 @@ type command = [
 (** {2 Requests} *)
 
 type request = {
+  id : int;
   command : command;
 } <ocaml field_prefix="request_">
 
@@ -43,7 +44,7 @@ type response_status = [
 ]
 
 type response = {
-  id : int64;
+  id : int;
   status : response_status;
   (* If an error happens *)
   ?error : error option;
